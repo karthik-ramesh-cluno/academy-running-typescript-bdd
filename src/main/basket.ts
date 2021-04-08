@@ -14,4 +14,8 @@ export class Basket {
   checkContent() {
     throw new Error("Method not implemented.");
   }
+
+  getCreationDate() {
+    return undefined;
+  }
 }
