@@ -42,8 +42,8 @@ describe("Basket", () => {
 
       expect(basket.getBasketItems()).toEqual([
         {
-          product: "The Hobbit",
-          quantity: 2,
+          item: {id: 10002, type: 'Books', product: 'The Hobbit', unitPrice: 5, unitCurrency: 'GBP'},
+          quantity: 2
         },
       ]);
     });
