@@ -11,7 +11,7 @@ describe("Basket", () => {
     it("should not create a basket when no product is added", () => {
       let printer: Printer = mock<Printer>();
       let basket: Basket = new Basket(printer);
-      expect(basket.getCreationDate()).toBeUndefined();
+      expect(basket.getCreationDate()).toBe("");
     });
     it("should create a basket when a product is added", () => {
       let printer: Printer = mock<Printer>();
@@ -42,8 +42,17 @@ describe("Basket", () => {
 
       expect(basket.getBasketItems()).toEqual([
         {
-          item: {id: 10002, type: 'Books', product: 'The Hobbit', unitPrice: 5, unitCurrency: 'GBP'},
-          quantity: 2
+          product: {
+            id: 10002,
+            type: "Books",
+            name: "The Hobbit",
+            unitPrice: { amount: 5, currency: "GBP" },
+          },
+          quantity: 2,
+          price: {
+            amount: 10,
+            currency: "GBP",
+          },
         },
       ]);
     });
@@ -54,6 +63,21 @@ describe("Basket", () => {
       basket.add("Something random", 2);
 
       expect(basket.getBasketItems()).toEqual([]);
+    });
+  });
+
+  describe("check content", () => {
+    it("should print the basket details", () => {
+      let printer: Printer = mock<Printer>();
+      let basket: Basket = new Basket(printer);
+      MockDate.set(1617875183667); // 2021-04-08T09:46:23.667Z
+      basket.add("The Hobbit", 2);
+      basket.checkContent();
+      expect(printer.printline).toBeCalledWith("Thu Apr 08 2021");
+      expect(printer.printline).toBeCalledWith(
+        "2 x The Hobbit // 2 x 5.00 = £10.00"
+      );
+      expect(printer.printline).toBeCalledWith("Total: £10.00");
     });
   });
 });

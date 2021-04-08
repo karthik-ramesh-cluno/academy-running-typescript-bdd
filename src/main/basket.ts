@@ -1,20 +1,14 @@
+import { WarehouseProduct, Warehouse, Money } from "./warehouse";
+
 export interface Printer {
   printline(line: string): void;
 }
 
 interface Item {
-  product: string;
+  product: WarehouseProduct;
   quantity: number;
-  price: number
+  price: Money;
 }
-
-const Warehouse = [
-  {id: 10001, type: 'Books', product: 'Lord of the Rings', unitPrice: 10, unitCurrency: 'GBP'},
-  {id: 10002, type: 'Books', product: 'The Hobbit', unitPrice: 5, unitCurrency: 'GBP'},
-  {id: 20001, type: 'DVDs', product: 'Game of Thrones', unitPrice: 9, unitCurrency: 'GBP'},
-  {id: 20002, type: 'DVDs', product: 'Breaking Bad', unitPrice: 7, unitCurrency: 'GBP'}
-]
-
 
 export class Basket {
   private printer: Printer;
@@ -25,24 +19,35 @@ export class Basket {
     this.printer = printer;
   }
 
-  add(product: string, quantity: number) {
+  add(productName: string, quantity: number) {
     if (!this.creationDate) this.creationDate = new Date();
-    const item = Warehouse.find((item) => item.product === product);
-    if (item){
+    const item = Warehouse.find((item) => item.name === productName);
+    if (item) {
       this.items.push({
-        product: item.product,
+        product: item,
         quantity,
-        price: item.unitPrice * quantity
+        price: {
+          amount: item.unitPrice.amount * quantity,
+          currency: item.unitPrice.currency,
+        },
       });
     }
   }
 
   checkContent() {
-    throw new Error("Method not implemented.");
+    this.printer.printline(this.getCreationDate());
+    let amount = 0;
+    this.items.map((item) => {
+      const printItem = `${item.quantity} x ${item.product.name} // ${item.quantity} x ${item.product.unitPrice.amount}.00 = £${item.price.amount}.00`;
+      this.printer.printline(printItem);
+      amount += item.price.amount;
+    });
+
+    this.printer.printline(`Total: £${amount}.00`);
   }
 
-  getCreationDate() {
-    return this.creationDate?.toDateString();
+  getCreationDate(): string {
+    return this.creationDate?.toDateString() || "";
   }
 
   getBasketItems(): Item[] {
