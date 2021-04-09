@@ -1,25 +1,7 @@
 import { defineFeature, loadFeature } from "jest-cucumber";
+import { Basket } from "../../main/basket"
 
 const feature = loadFeature('./src/specs/features/shopping-basket.feature')
-
-class Basket {
-
-    addProduct(product: string, quantity: number) {
-        throw new Error('notp implemented')
-    }
-
-    getCreationDate() {
-        return undefined;
-    }
-
-    getItems() {
-        return undefined;
-    }
-
-    getTotal() {
-        return undefined;
-    }
-}
 
 defineFeature(feature, test => {
     let basket: Basket;
@@ -37,13 +19,13 @@ defineFeature(feature, test => {
         when('I check the content of my shopping basket', () => {
 
         })
-        then(/^it should have been created on the "(.*)"$/, (date) => {
+        then(/^it should have been created on the "(.*)"$/, (date: string) => {
             expect(basket.getCreationDate()).toBe(date)
         })
         then(/^it should contain the following items$/, (printedOutput) => {
             expect(basket.getItems()).toBe(printedOutput)
         })
-        then(/^the cart total is "([^"]*)"$/, (total) => {
+        then(/^the cart total is "([^"]*)"$/, (total: number) => {
             expect(basket.getTotal()).toBe(total)
         })
     })

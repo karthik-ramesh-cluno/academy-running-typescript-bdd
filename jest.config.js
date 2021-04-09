@@ -5,6 +5,7 @@ module.exports = {
     },
     testMatch: [
         '(/__test__/.*|(\\.|/)(test|spec))\\.tsx?$',
+        '**/*.spec.ts',
         '**/*.test.ts',
         '**/*.steps.ts'
     ],
