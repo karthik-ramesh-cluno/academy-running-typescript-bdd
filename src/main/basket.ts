@@ -1,7 +1,13 @@
+import {ProductRepo} from "./ProductRepo";
+
 export class Basket {
+    private productRepo: ProductRepo;
+    constructor(productRepo: ProductRepo) {
+        this.productRepo = productRepo;
+    }
 
     add(numberOfProducts: number, productTitle: string): void {
-        throw new Error('Not implemented');
+        this.productRepo.addTheHobbit(numberOfProducts)
     }
 
     getContents(): string {
