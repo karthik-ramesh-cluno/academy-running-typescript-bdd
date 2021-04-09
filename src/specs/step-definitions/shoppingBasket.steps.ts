@@ -1,10 +1,8 @@
 import { Basket } from "../../main/basket"
-import {DataTable} from '@cucumber/cucumber'
 
 import {defineFeature, loadFeature} from "jest-cucumber";
-import { isBreakStatement } from 'typescript';
 
-const feature = loadFeature('./src/specs/features/shoppingBasket.feature')
+const feature = loadFeature('./src/specs/features/basket.feature')
 
 defineFeature(feature, test => {
     let basket: Basket;
@@ -13,6 +11,7 @@ defineFeature(feature, test => {
     })
 
     test("Add items to shopping basket", ({ given, and, when, then}) => {
+        let contents: string
         given(/^I add (\d+) units of "([^"]*)" to my shopping basket$/, (numberOfProducts: number, productTitle:string) => {
             basket.add(numberOfProducts, productTitle)
         })
@@ -20,10 +19,10 @@ defineFeature(feature, test => {
             basket.add(numberOfProducts, productTitle)
         })
         when(/^I check the content of my shopping basket$/, (amount: number, date: string) => {
-            basket.getContents()
+            contents = basket.getContents()
         })
         then("it should contain the following information:", (basketContents: string) => {
-            expect(getContents).toHaveBeenCalledWith(basketContents)
+            expect(contents).toEqual(basketContents)
         })
     })
 })
