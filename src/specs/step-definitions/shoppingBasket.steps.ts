@@ -1,4 +1,5 @@
 import { Basket } from "../../main/basket"
+import {ProductRepo} from "../../main/ProductRepo";
 
 import {defineFeature, loadFeature} from "jest-cucumber";
 
@@ -6,8 +7,10 @@ const feature = loadFeature('./src/specs/features/basket.feature')
 
 defineFeature(feature, test => {
     let basket: Basket;
+    let productRepo: ProductRepo;
     beforeEach(() => {
-        basket = new Basket();
+        productRepo = new ProductRepo;
+        basket = new Basket(productRepo);
     })
 
     test("Add items to shopping basket", ({ given, and, when, then}) => {
