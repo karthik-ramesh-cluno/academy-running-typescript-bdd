@@ -11,14 +11,23 @@ export interface Catalog {
 }
 
 export class Basket {
-    private products: BasketItem[]
+    private products: Record<string, BasketItem>
+    private catalog: Catalog;
 
     constructor(catalog: Catalog) {
-      this.products = []
+        this.catalog = catalog;
+        this.products = {}
     }
 
     addProduct(product: string, quantity: number) {
-        this.products.push({product, quantity})
+        if (this.products[product]) {
+            this.products[product].quantity += quantity
+        } else {
+            this.products[product] = {
+                quantity,
+                product
+            }
+        }
     }
 
     getCreationDate(): Date {
@@ -26,11 +35,13 @@ export class Basket {
     }
 
     getItems(): BasketItem[] {
-        return [...this.products];
+        return Object.values(this.products);
     }
 
     getTotal(): number {
-        return 0;
+        return this.getItems().reduce((acc, basketItem: BasketItem) => {
+            return acc + (this.catalog.getPrice(basketItem.product) * basketItem.quantity);
+        }, 0)
     }
 }
 
